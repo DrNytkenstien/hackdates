@@ -1,0 +1,44 @@
+{
+  "user_3JfqzgNNrWRk7barYA1t7S1ZVhU": [
+    {
+      "id": 1,
+      "timestamp": "2026-09-22 08:15:07 UTC",
+      "type": "GENESIS_INITIALIZATION",
+      "details": "OrbitGuard NASA Telemetry Bridge Initialized",
+      "hash": "35b7bf13e54b12c195d0a7fe0d2b5b2d575c3b03abadfa52e662a3d7afb3d903",
+      "prevHash": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": 2,
+      "timestamp": "2026-09-22 08:15:26 UTC",
+      "type": "NASA_POINT_ANOMALY_DETECTED",
+      "details": "Channel A-1 (SMAP) threshold breach at step 4690",
+      "hash": "ff7afc1df9f562ca2187cf954ffa6cf983da61d66720444be947bd1d8910b2aa",
+      "prevHash": "35b7bf13e54b12c195d0a7fe0d2b5b2d575c3b03abadfa52e662a3d7afb3d903"
+    },
+    {
+      "id": 3,
+      "timestamp": "2026-09-22 08:19:49 UTC",
+      "type": "NASA_POINT_ANOMALY_DETECTED",
+      "details": "Channel A-1 (SMAP) threshold breach at step 4690",
+      "hash": "883c8932dc97cb48a2f8da21e95d6eb2c7abca3f8ce15b077761370876080c4c",
+      "prevHash": "ff7afc1df9f562ca2187cf954ffa6cf983da61d66720444be947bd1d8910b2aa"
+    },
+    {
+      "id": 4,
+      "timestamp": "2026-09-22 08:22:44 UTC",
+      "type": "NASA_POINT_ANOMALY_DETECTED",
+      "details": "Channel A-1 (SMAP) threshold breach at step 4690",
+      "hash": "4ac8a090c81e0a4001f1188a35f9fb88f08a6e6faffc3b7c3c17025828e0318d",
+      "prevHash": "883c8932dc97cb48a2f8da21e95d6eb2c7abca3f8ce15b077761370876080c4c"
+    },
+    {
+      "id": 5,
+      "timestamp": "2026-09-22 08:24:40 UTC",
+      "type": "AUTONOMOUS_RECOVERY_VERIFIED",
+      "details": "Channel A-1 (SMAP) mitigation verified by operator action",
+      "hash": "13bb66e1bfc7b75f9134ab35b74d0dfc50ac7381e7792e2aa052184f7bd6d580",
+      "prevHash": "4ac8a090c81e0a4001f1188a35f9fb88f08a6e6faffc3b7c3c17025828e0318d"
+    }
+  ]
+}
