@@ -1,7 +1,8 @@
 import asyncio
 import json
+import math
 import os
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -19,9 +20,41 @@ ORBIT_DATA_PATH = os.path.join(os.path.dirname(__file__), "data", "orbit_telemet
 
 def load_telemetry_dataset() -> List[dict]:
     if os.path.exists(ORBIT_DATA_PATH):
-        with open(ORBIT_DATA_PATH, "r") as f:
-            return json.load(f)
-    return []
+        try:
+            with open(ORBIT_DATA_PATH, "r") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return generate_fallback_telemetry()
+
+def generate_fallback_telemetry(num_frames: int = 100) -> List[dict]:
+    dataset = []
+    for i in range(num_frames):
+        theta = (i / num_frames) * 2 * math.pi
+        frame = {
+            "latitude": 18.45 + math.sin(theta) * 4.8,
+            "longitude": 73.9 + math.cos(theta) * 8.6,
+            "altitude_km": 540.0 + math.sin(theta * 2) * 4.7,
+            "velocity_kms": 7.55 + math.cos(theta * 1.7) * 0.018,
+            "rw2_speed_rpm": 2100.0 + math.sin(theta * 1.8) * 65,
+            "bus_voltage_v": 28.0,
+            "component_temp_c": 30.0,
+            "mission_phase": "NOMINAL CRUISE"
+        }
+        if i == 20:
+            frame["rw2_speed_rpm"] = 4850.0
+            frame["mission_phase"] = "RW2 OVERSPEED"
+        elif i == 45:
+            frame["velocity_kms"] = 7.12
+            frame["mission_phase"] = "VELOCITY OUT OF SAFE RANGE"
+        elif i == 70:
+            frame["bus_voltage_v"] = 22.4
+            frame["mission_phase"] = "EPS UNDERVOLTAGE"
+        elif i == 85:
+            frame["component_temp_c"] = 68.5
+            frame["mission_phase"] = "THERMAL OVERLIMIT"
+        dataset.append(frame)
+    return dataset
 
 def map_phase_to_fault(frame: dict) -> Optional[str]:
     phase = frame.get("mission_phase", "")
@@ -66,7 +99,8 @@ def build_candidates_for_fault(fault_type: str):
             }
         ]
         return candidates, "Magnetorquer Momentum Desaturation"
-    else:
+
+    elif fault_type == "Orbit Velocity Deviation":
         candidates = [
             {
                 "name": "Closed-Loop Retro-Thrust Orbit Trim",
@@ -96,21 +130,86 @@ def build_candidates_for_fault(fault_type: str):
         ]
         return candidates, "Closed-Loop Retro-Thrust Orbit Trim"
 
+    elif fault_type == "Power Bus Undervoltage":
+        candidates = [
+            {
+                "name": "Payload Load Shedding & Battery Re-conditioning",
+                "short": "Load Shed",
+                "color": "#38bdf8",
+                "metrics": {"recoveryTime": 18.5, "resourceUse": 5, "risk": 12, "missionImpact": 20, "constraint": 91},
+                "score": 90,
+                "calculations": [
+                    "P_saved = P_total - P_essential",
+                    "V_bus_new = V_bus + (I_charge × R_internal)",
+                    "Result: Bus voltage stabilized at nominal 28.2V"
+                ],
+                "explanation": "Temporarily isolates non-critical science payloads to restore primary bus voltage."
+            },
+            {
+                "name": "Solar Array Orient Thrust Slew",
+                "short": "Array Slew",
+                "color": "#f59e0b",
+                "metrics": {"recoveryTime": 9.2, "resourceUse": 45, "risk": 35, "missionImpact": 25, "constraint": 78},
+                "score": 76,
+                "calculations": [
+                    "θ_sun = arctan(S_vector)",
+                    "P_gen = P_max × cos(θ_sun)",
+                    "Result: Solar power generation boosted by 310W"
+                ],
+                "explanation": "Re-orients primary solar array vector toward peak solar intensity."
+            }
+        ]
+        return candidates, "Payload Load Shedding & Battery Re-conditioning"
+
+    else:  # Thermal Excursion
+        candidates = [
+            {
+                "name": "Radiator Panel Attitude Re-orientation",
+                "short": "Radiator Slew",
+                "color": "#38bdf8",
+                "metrics": {"recoveryTime": 22.0, "resourceUse": 10, "risk": 14, "missionImpact": 12, "constraint": 93},
+                "score": 91,
+                "calculations": [
+                    "Q_emitted = ε × σ × A × (T^4 - T_space^4)",
+                    "ΔT_rate = -1.4°C/min",
+                    "Result: Component temperature cooled to 42.0°C"
+                ],
+                "explanation": "Slews radiator panels to point toward deep space cold-sink."
+            },
+            {
+                "name": "Duty Cycle Power Throttle",
+                "short": "Power Throttle",
+                "color": "#f59e0b",
+                "metrics": {"recoveryTime": 15.0, "resourceUse": 15, "risk": 22, "missionImpact": 38, "constraint": 80},
+                "score": 78,
+                "calculations": [
+                    "P_thermal = I²R × DutyCycle",
+                    "Result: Heat generation reduced by 45%"
+                ],
+                "explanation": "Throttles high-power processing units to mitigate internal thermal generation."
+            }
+        ]
+        return candidates, "Radiator Panel Attitude Re-orientation"
+
+@app.get("/")
+def read_root():
+    return {"status": "online", "system": "OrbitGuard-AI Backend"}
+
+@app.get("/health")
+def health_check():
+    return {"status": "healthy"}
+
 @app.websocket("/ws/orbitguard")
 async def orbitguard_websocket(websocket: WebSocket):
     await websocket.accept()
     dataset = load_telemetry_dataset()
-    
-    if not dataset:
-        await websocket.close(code=1000, reason="No dataset found")
-        return
 
     step_index = 0
     try:
         while True:
             raw_frame = dataset[step_index % len(dataset)]
             step_index += 1
-            
+
             telemetry = {
                 "latitude": raw_frame.get("latitude", 0.0),
                 "longitude": raw_frame.get("longitude", 0.0),
@@ -118,9 +217,9 @@ async def orbitguard_websocket(websocket: WebSocket):
                 "velocity": raw_frame.get("velocity_kms", 7.55),
                 "wheelRPM": raw_frame.get("rw2_speed_rpm", 2100.0),
             }
-            
+
             fault_type = map_phase_to_fault(raw_frame)
-            
+
             if fault_type:
                 candidates, selected = build_candidates_for_fault(fault_type)
                 payload = {
@@ -131,7 +230,6 @@ async def orbitguard_websocket(websocket: WebSocket):
                     "eventId": f"{fault_type}-{step_index}"
                 }
                 await websocket.send_json(payload)
-                # Pause on active anomaly for 30 seconds so operator has full control
                 await asyncio.sleep(30)
             else:
                 payload = {
@@ -142,7 +240,6 @@ async def orbitguard_websocket(websocket: WebSocket):
                     "eventId": f"nominal-{step_index}"
                 }
                 await websocket.send_json(payload)
-                # Stream calm nominal coordinates every 3 seconds
                 await asyncio.sleep(3)
 
     except WebSocketDisconnect:

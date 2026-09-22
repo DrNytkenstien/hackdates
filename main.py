@@ -19,7 +19,7 @@ from src.radiation_defense import (
 )
 
 def execute_b_dot_safe_mode():
-    print("\n" + "=" * 70)
+    print("n" + "=" * 70)
     print("[HARDWARE FALLBACK TRIGGERED]: B-DOT AUTONOMOUS SAFE-MODE ENGAGED")
     print("=" * 70)
     print("  -> CAUSE: High-level AI Flight Agent reached maximum attempt limits.")
@@ -30,7 +30,7 @@ def execute_b_dot_safe_mode():
     print("  -> Payloads & Thrusters: HARD ISOLATED / POWERED DOWN.")
     print("-" * 70)
     print("STATE: Satellite stabilized. Power reserve nominal. Holding for Ground Pass...")
-    print("=" * 70 + "\n")
+    print("=" * 70 + "n")
 
 def main():
     print("=" * 70)
@@ -44,7 +44,7 @@ def main():
     # Initialize Ground Cache
     ground_cache = GroundStationCache()
         
-    print("\nEnter a Mission Directive (or press Enter to use default demo directive):")
+    print("nEnter a Mission Directive (or press Enter to use default demo directive):")
     user_input = input("> ").strip()
     
     default_prompt = (
@@ -53,7 +53,7 @@ def main():
     )
     directive = user_input if user_input else default_prompt
     
-    print(f"\nActive Ground Directive: {directive}\n")
+    print(f"nActive Ground Directive: {directive}n")
     
     max_attempts = 3
     attempt = 1
@@ -70,7 +70,7 @@ def main():
             print(f"Agent failed to generate valid Pydantic plan: {e}")
             break
             
-        print(f"Plan Actions: {[t.action for t in plan.tasks]}\n")
+        print(f"Plan Actions: {[t.action for t in plan.tasks]}n")
         
         print("[GATE 1]: Running Z3 SMT Static Verification...")
         g1_result = verify_gate_1_z3(plan)
@@ -78,13 +78,13 @@ def main():
             print(f"  -> FAIL: {g1_result.message}")
             error_feedback = {"gate": 1, "details": g1_result.error_details}
             attempt += 1
-            print("\nRe-routing mathematical violation back to agent...\n")
+            print("nRe-routing mathematical violation back to agent...n")
             continue
-        print(f"  -> PASS: {g1_result.message}\n")
+        print(f"  -> PASS: {g1_result.message}n")
         
         print("[SIMULATOR]: Executing tasks in SimPy hardware environment...")
         telemetry = run_satellite_simulation(plan)
-        print("  -> Execution complete. Telemetry generated.\n")
+        print("  -> Execution complete. Telemetry generated.n")
         
         print("[GATE 2]: Running Telemetry Invariant Audit...")
         g2_result = verify_gate_2_telemetry(telemetry)
@@ -92,9 +92,9 @@ def main():
             print(f"  -> FAIL: {g2_result.message}")
             error_feedback = {"gate": 2, "details": g2_result.error_details}
             attempt += 1
-            print("\nRe-routing runtime telemetry machine evidence back to agent...\n")
+            print("nRe-routing runtime telemetry machine evidence back to agent...n")
             continue
-        print(f"  -> PASS: {g2_result.message}\n")
+        print(f"  -> PASS: {g2_result.message}n")
         
         # =====================================================================
         # LAYER 1: GROUND STATION SIGNING & CACHING
@@ -109,7 +109,7 @@ def main():
         print("[GROUND STATION]: Plan cryptographically sealed and cached.")
         print(f"  -> Packet ID: {packet_id}")
         print(f"  -> HMAC-SHA256 Signature: {hmac_sig[:16]}...{hmac_sig[-16:]}")
-        print("  -> Uplinking payload across TC&T RF radio link...\n")
+        print("  -> Uplinking payload across TC&T RF radio link...n")
 
         # =====================================================================
         # STOCHASTIC RADIATION ENVIRONMENT CONFIGURATION
@@ -126,7 +126,7 @@ def main():
         if transit_hit:
             print("[SPACE ENVIRONMENT]: ⚡ SOUTH ATLANTIC ANOMALY: RF Transit Strike!")
             rf_payload = inject_transit_seu_bit_flip(raw_payload)
-            print("  -> Solar heavy ion flipped a bit in the incoming RF bitstream.\n")
+            print("  -> Solar heavy ion flipped a bit in the incoming RF bitstream.n")
         else:
             rf_payload = raw_payload
 
@@ -140,15 +140,15 @@ def main():
             print("  -> TRANSMITTING: Outbound Diagnostic NACK to Ground Station...")
             
             # Ground Fast-Path Recovery
-            print("\n[GROUND STATION]: Received NACK for Packet " + packet_id)
+            print("n[GROUND STATION]: Received NACK for Packet " + packet_id)
             print("  -> Bypassing LLM re-planning loop (Plan logic is valid).")
             print("  -> Retrieving uncorrupted packet from Ground Cache...")
             rf_payload = ground_cache.retrieve(packet_id)
             print("  -> Re-uplinking pristine telecommand payload...")
-            print("  -> PASS: HMAC verified on second uplink pass!\n")
+            print("  -> PASS: HMAC verified on second uplink pass!n")
 
         else:
-            print("  -> PASS: Onboard HMAC signature verified. Zero transit corruption.\n")
+            print("  -> PASS: Onboard HMAC signature verified. Zero transit corruption.n")
 
         # =====================================================================
         # LAYER 4: ONBOARD TRIPLE MODULAR REDUNDANCY (TMR) MEMORY CHECK
@@ -169,7 +169,7 @@ def main():
             print("  -> FATAL: TMR memory corruption unrecoverable.")
             break
 
-        print("\nSUCCESS: Execution verified, signed, memory-scrubbed, and deployed safely!")
+        print("nSUCCESS: Execution verified, signed, memory-scrubbed, and deployed safely!")
         success = True
         break
         
