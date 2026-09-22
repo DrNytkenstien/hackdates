@@ -1,0 +1,7 @@
+z3-solver
+simpy
+pydantic
+streamlit
+google-genai
+python-dotenv
+plotly
