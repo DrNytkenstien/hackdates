@@ -1,0 +1,152 @@
+[
+  {
+    "latitude": -0.2486,
+    "longitude": -143.7889,
+    "altitude_km": 599.6,
+    "velocity_kms": 7.55,
+    "rw2_speed_rpm": 2452.0,
+    "bus_voltage_v": 28.0,
+    "component_temp_c": 29.6,
+    "mission_phase": "NOMINAL ORBIT"
+  },
+  {
+    "latitude": 25.2124,
+    "longitude": -149.2402,
+    "altitude_km": 608.8,
+    "velocity_kms": 7.54,
+    "rw2_speed_rpm": 2391.2,
+    "bus_voltage_v": 28.0,
+    "component_temp_c": 32.5,
+    "mission_phase": "SUNLIT PASS"
+  },
+  {
+    "latitude": 50.5266,
+    "longitude": -156.8307,
+    "altitude_km": 614.7,
+    "velocity_kms": 7.54,
+    "rw2_speed_rpm": 2338.4,
+    "bus_voltage_v": 22.8,
+    "component_temp_c": 32.3,
+    "mission_phase": "ANOMALY - EPS UNDERVOLTAGE"
+  },
+  {
+    "latitude": 74.7913,
+    "longitude": -179.1833,
+    "altitude_km": 616.2,
+    "velocity_kms": 7.54,
+    "rw2_speed_rpm": 2326.1,
+    "bus_voltage_v": 27.9,
+    "component_temp_c": 30.0,
+    "mission_phase": "NOMINAL ORBIT"
+  },
+  {
+    "latitude": 75.2189,
+    "longitude": 60.4533,
+    "altitude_km": 613.0,
+    "velocity_kms": 7.54,
+    "rw2_speed_rpm": 2362.0,
+    "bus_voltage_v": 27.8,
+    "component_temp_c": 31.6,
+    "mission_phase": "ECLIPSE ENTRY"
+  },
+  {
+    "latitude": 51.0168,
+    "longitude": 37.2555,
+    "altitude_km": 605.7,
+    "velocity_kms": 7.55,
+    "rw2_speed_rpm": 2380.9,
+    "bus_voltage_v": 28.0,
+    "component_temp_c": 76.1,
+    "mission_phase": "ANOMALY - THERMAL OVERLIMIT"
+  },
+  {
+    "latitude": 25.7086,
+    "longitude": 29.5784,
+    "altitude_km": 595.8,
+    "velocity_kms": 7.56,
+    "rw2_speed_rpm": 2364.2,
+    "bus_voltage_v": 27.7,
+    "component_temp_c": 32.2,
+    "mission_phase": "NOMINAL ORBIT"
+  },
+  {
+    "latitude": 0.2486,
+    "longitude": 24.1117,
+    "altitude_km": 585.3,
+    "velocity_kms": 7.57,
+    "rw2_speed_rpm": 2444.3,
+    "bus_voltage_v": 28.2,
+    "component_temp_c": 31.7,
+    "mission_phase": "ECLIPSE EXIT"
+  },
+  {
+    "latitude": -25.2124,
+    "longitude": 18.6605,
+    "altitude_km": 576.1,
+    "velocity_kms": 7.58,
+    "rw2_speed_rpm": 64.3,
+    "bus_voltage_v": 27.3,
+    "component_temp_c": 31.5,
+    "mission_phase": "ANOMALY - RW2 STALL"
+  },
+  {
+    "latitude": -50.5266,
+    "longitude": 11.0699,
+    "altitude_km": 570.2,
+    "velocity_kms": 7.59,
+    "rw2_speed_rpm": 2398.0,
+    "bus_voltage_v": 27.8,
+    "component_temp_c": 31.6,
+    "mission_phase": "NOMINAL ORBIT"
+  },
+  {
+    "latitude": -74.7913,
+    "longitude": -11.2826,
+    "altitude_km": 568.7,
+    "velocity_kms": 7.59,
+    "rw2_speed_rpm": 6117.3,
+    "bus_voltage_v": 28.0,
+    "component_temp_c": 31.6,
+    "mission_phase": "ANOMALY - RW2 OVERSPEED"
+  },
+  {
+    "latitude": -75.2189,
+    "longitude": -131.6461,
+    "altitude_km": 571.9,
+    "velocity_kms": 7.58,
+    "rw2_speed_rpm": 2324.5,
+    "bus_voltage_v": 27.9,
+    "component_temp_c": 30.9,
+    "mission_phase": "SUNLIT PASS"
+  },
+  {
+    "latitude": -51.0168,
+    "longitude": -154.8439,
+    "altitude_km": 579.2,
+    "velocity_kms": 7.58,
+    "rw2_speed_rpm": 2346.6,
+    "bus_voltage_v": 28.0,
+    "component_temp_c": 30.8,
+    "mission_phase": "NOMINAL ORBIT"
+  },
+  {
+    "latitude": -25.7086,
+    "longitude": -162.5209,
+    "altitude_km": 589.1,
+    "velocity_kms": 7.97,
+    "rw2_speed_rpm": 2363.8,
+    "bus_voltage_v": 28.0,
+    "component_temp_c": 33.0,
+    "mission_phase": "ANOMALY - VELOCITY OUT OF SAFE RANGE"
+  },
+  {
+    "latitude": -0.2486,
+    "longitude": -167.9876,
+    "altitude_km": 599.6,
+    "velocity_kms": 7.55,
+    "rw2_speed_rpm": 2341.3,
+    "bus_voltage_v": 28.0,
+    "component_temp_c": 32.9,
+    "mission_phase": "NOMINAL ORBIT"
+  }
+]
